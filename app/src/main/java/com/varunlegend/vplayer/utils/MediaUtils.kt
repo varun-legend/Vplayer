@@ -1,24 +1,26 @@
 package com.varunlegend.vplayer.utils
+
 import android.content.Context
 import android.media.MediaMetadataRetriever
 import android.net.Uri
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.session.MediaSession
 import java.util.concurrent.TimeUnit
 
+/** Utility for building players and extracting metadata */
 object MediaUtils {
-    fun buildMedia3Player(context: Context): Player {
-        val player = ExoPlayer.Builder(context).build()
-        MediaSession.Builder(context, player).build()
-        return player
+    fun buildPlayer(context: Context): Player {
+        return ExoPlayer.Builder(context).build()
     }
-    fun getDuration(context: Context, uri: Uri): String { /* ... */ }
-    fun showSpeedDialog(context: Context) { /* ... */ }
-    fun showSubtitleSelector(context: Context, player: Player) { /* ... */ }
-    fun showEqualizerDialog(context: Context) { /* ... */ }
-    fun extractAudio(context: Context) { /* ... */ }
-    fun showVideoFiltersDialog(context: Context) { /* ... */ }
+
+    fun getDuration(ctx: Context, uri: Uri): String {
+        val mmr = MediaMetadataRetriever().apply { setDataSource(ctx, uri) }
+        val durMs = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLongOrNull() ?: 0L
+        mmr.release()
+        return String.format(
+            "%02d:%02d",
+            TimeUnit.MILLISECONDS.toMinutes(durMs),
+            TimeUnit.MILLISECONDS.toSeconds(durMs) % 60
+        )
+    }
 }
