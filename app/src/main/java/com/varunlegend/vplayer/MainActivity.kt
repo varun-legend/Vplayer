@@ -11,48 +11,51 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.varunlegend.vplayer.adapters.MediaAdapter
 import com.varunlegend.vplayer.databinding.ActivityMainBinding
+import com.varunlegend.vplayer.utils.MediaUtils
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var b: ActivityMainBinding
     private val mediaList = mutableListOf<MediaItemModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        b = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(b.root)
 
-        checkPermissions()
-        setupRecyclerView()
-    }
-
-    private fun checkPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
             != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 100)
-        } else loadMedia()
-    }
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 100)
+        } else scanMedia()
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array< String>, grantResults: IntArray) {
-        if (requestCode == 100 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            loadMedia()
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
-
-    private fun setupRecyclerView() {
-        binding.rvMedia.layoutManager = LinearLayoutManager(this)
-        binding.rvMedia.adapter = MediaAdapter(mediaList) { uri ->
-            val intent = Intent(this, PlayerActivity::class.java)
-            intent.putExtra("uri", uri.toString())
-            startActivity(intent)
+        b.rvMedia.layoutManager = LinearLayoutManager(this)
+        b.rvMedia.adapter = MediaAdapter(mediaList) { item ->
+            startActivity(Intent(this, PlayerActivity::class.java).apply {
+                putExtra("uri", item.uri.toString())
+            })
         }
     }
 
-    private fun loadMedia() {
-        MediaUtils.fetchLocalMedia(this).forEach { item ->
-            mediaList.add(item)
+    override fun onRequestPermissionsResult(req: Int, perms: Array<String>, res: IntArray) {
+        super.onRequestPermissionsResult(req, perms, res)
+        if (res.isNotEmpty() && res[0] == PackageManager.PERMISSION_GRANTED) scanMedia()
+    }
+
+    private fun scanMedia() {
+        mediaList.clear()
+        listOf(
+            File("/storage/emulated/0/Movies"),
+            File("/storage/emulated/0/Music")
+        ).filter { it.exists() }.flatMap { it.listFiles()?.toList() ?: emptyList() }
+         .filter { it.extension.lowercase() in listOf("mp4","mkv","mp3","wav","avi","flac") }
+         .forEach { file ->
+            mediaList.add(MediaItemModel(
+                file.nameWithoutExtension,
+                MediaUtils.getDuration(this, Uri.fromFile(file)),
+                Uri.fromFile(file)
+            ))
         }
-        binding.rvMedia.adapter?.notifyDataSetChanged()
+        b.rvMedia.adapter?.notifyDataSetChanged()
     }
 }
