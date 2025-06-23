@@ -4,6 +4,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import androidx.media3.common.Player
 import androidx.media3.ui.PlayerView
+import android.content.context
 
 /** Detects flings to shift subtitle timing */
 class SubtitleGestureHelper(
