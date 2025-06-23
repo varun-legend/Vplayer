@@ -3,4 +3,6 @@
     <string name="permission_read_storage">Please grant storage permission to browse media.</string>
     <string name="menu_speed">Speed</string>
     <string name="menu_zoom_reset">Reset Zoom</string>
+     <string name="menu_sub_timing">Shift Subtitle</string>
+    <string name="menu_sub_size">Subtitle Size</string>
 </resources>
