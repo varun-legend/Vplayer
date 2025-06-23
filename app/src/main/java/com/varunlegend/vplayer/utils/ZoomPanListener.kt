@@ -1,18 +1,23 @@
 package com.varunlegend.vplayer.utils
+
 import android.graphics.Matrix
 import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.MotionEvent
 
-class ZoomPanListener(private val target: View) : View.OnTouchListener {
-    private var scaleFactor = 1f
+/** Handles pinch-to-zoom and pan on PlayerView */
+class ZoomPanListener(private val view: View) : View.OnTouchListener {
+    private var scale = 1f
     private val matrix = Matrix()
-    private val scaleDetector = ScaleGestureDetector(target.context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
-        override fun onScale(detector: ScaleGestureDetector) = true.also {
-            scaleFactor = (scaleFactor * detector.scaleFactor).coerceIn(1f, 4f)
-            matrix.setScale(scaleFactor, scaleFactor, detector.focusX, detector.focusY)
-            target.imageMatrix = matrix
+    private val detector = ScaleGestureDetector(view.context,
+        object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+            override fun onScale(det: ScaleGestureDetector): Boolean {
+                scale = (scale * det.scaleFactor).coerceIn(1f, 4f)
+                matrix.setScale(scale, scale, det.focusX, det.focusY)
+                (view as? androidx.media3.ui.PlayerView)?.videoSurfaceView?.matrix = matrix
+                return true
+            }
         }
-    })
-    override fun onTouch(v: View, event: MotionEvent) = scaleDetector.onTouchEvent(event)
+    )
+    override fun onTouch(v: View, event: MotionEvent) = detector.onTouchEvent(event)
 }
