@@ -2,19 +2,16 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 }
-
 android {
-    namespace 'com.varunlegend.vplayer'
+    namespace 'com.varunlegend.vplayerultimate'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.varunlegend.vplayer"
+        applicationId "com.varunlegend.vplayerultimate"
         minSdk 21
         targetSdk 33
         versionCode 1
         versionName "1.0"
-        vectorDrawables.useSupportLibrary = true
-        multiDexEnabled true
     }
 
     buildFeatures { viewBinding true }
@@ -35,25 +32,11 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.recyclerview:recyclerview:1.3.0'
-    implementation 'androidx.multidex:multidex:2.0.1'
 
     // Media3
     implementation 'androidx.media3:media3-exoplayer:1.2.0'
     implementation 'androidx.media3:media3-ui:1.2.0'
-    implementation 'androidx.media3:media3-session:1.2.0'
-    implementation 'androidx.media3:media3-datasource-okhttp:1.2.0'
 
-    // Chromecast & DLNA
-    implementation 'com.google.android.gms:play-services-cast:21.0.1'
-    implementation 'androidx.mediarouter:mediarouter:1.2.1'
-    implementation 'org.fourthline.cling:cling-core:2.1.2'
-
-    // Audio visualizer
-    implementation 'com.gauravk.audiovisualizer:barVisualizer:2.0.0'
-
-    // FFmpeg metadata
-    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.14'
-
-    // Gesture / streaming libs
-    implementation 'com.github.pedroSG94.rtmp-rtsp-stream-client-java:streaming:2.0.6'
+    // UI
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }
