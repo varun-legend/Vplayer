@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_speed"
+        android:title="@string/menu_speed" />
+    <item
+        android:id="@+id/action_zoom_reset"
+        android:title="@string/menu_zoom_reset" />
+    <item
+        android:id="@+id/action_sub_timing"
+        android:title="@string/menu_sub_timing" />
+    <item
+        android:id="@+id/action_sub_size"
+        android:title="@string/menu_sub_size" />
+</menu>
