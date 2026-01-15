@@ -1,35 +1,12 @@
-<!--
- MIT License
- 
- Copyright (c) 2026 Varun Prasath
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- SOFTWARE.
--->
-
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp" android:height="24dp"
     android:viewportWidth="24" android:viewportHeight="24">
+    <!-- Camera body -->
     <path
         android:fillColor="#888888"
         android:pathData="M4,8 h12 v8 h-12 z" />
-    
+    <!-- Lens/triangle -->
     <path
         android:fillColor="#888888"
         android:pathData="M17,10.5v-2c0,-0.83 -0.67,-1.5 -1.5,-1.5h-11c-0.83,0-1.5,0.67-1.5,1.5v7c0,0.83,0.67,1.5,1.5,1.5h11c0.83,0,1.5-0.67,1.5-1.5v-2l4,4v-11l-4,4z" />

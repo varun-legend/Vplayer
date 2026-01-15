@@ -1,28 +1,5 @@
-/*
- MIT License
- 
- Copyright (c) 2026 Varun Prasath
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- SOFTWARE.
-*/
-
 package com.varunlegend.vplayer
+
 import android.app.PictureInPictureParams
 import android.content.Intent
 import android.content.res.Configuration
@@ -52,7 +29,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var zoomHelper: ZoomPanListener
     private lateinit var subHelper: SubtitleGestureHelper
 
-    
+    // Gesture & system controls
     private lateinit var audioManager: AudioManager
     private var initialBrightness = 0f
     private var initialVolume = 0
@@ -69,7 +46,7 @@ class PlayerActivity : AppCompatActivity() {
         b = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(b.root)
 
-        
+        // Build ExoPlayer
         player = ExoPlayer.Builder(this).build()
         b.playerView.player = player
 
@@ -80,18 +57,18 @@ class PlayerActivity : AppCompatActivity() {
             player.playWhenReady = true
         }
 
-        
+        // Initialize helpers
         zoomHelper = ZoomPanListener(b.playerView)
         subHelper = SubtitleGestureHelper(this, player)
 
-        
+        // System metrics & volume
         val dm = resources.displayMetrics
         screenWidth = dm.widthPixels
         screenHeight = dm.heightPixels
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
 
-        
+        // Double-tap for speed toggle
         gestureDetector = GestureDetectorCompat(this, object : GestureDetector.SimpleOnGestureListener() {
             override fun onDoubleTap(e: MotionEvent): Boolean {
                 val currentSpeed = player.playbackParameters.speed
@@ -102,7 +79,7 @@ class PlayerActivity : AppCompatActivity() {
             }
         })
 
-        
+        // Combined touch listener
         b.playerView.setOnTouchListener { v, e ->
             gestureDetector.onTouchEvent(e)
 
@@ -121,11 +98,11 @@ class PlayerActivity : AppCompatActivity() {
                     val dx = e.x - initialX
                     val dy = e.y - initialY
                     if (kotlin.math.abs(dx) > kotlin.math.abs(dy)) {
-                        
+                        // Horizontal swipe: seek
                         val offset = (dx / screenWidth * player.duration).toLong()
                         player.seekTo((initialSeek + offset).coerceIn(0L, player.duration))
                     } else {
-                        
+                        // Vertical swipe: brightness (left) or volume (right)
                         if (initialX < screenWidth / 2) {
                             val newB = (initialBrightness - (dy / screenHeight * 255)).toInt().coerceIn(0, 255)
                             Settings.System.putInt(
@@ -141,7 +118,7 @@ class PlayerActivity : AppCompatActivity() {
                     }
                 }
             }
-            
+            // Chain other gesture helpers
             zoomHelper.onTouch(v, e) || subHelper.onTouch(b.playerView, e)
         }
     }

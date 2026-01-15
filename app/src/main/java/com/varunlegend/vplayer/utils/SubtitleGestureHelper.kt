@@ -1,28 +1,5 @@
-/*
- MIT License
- 
- Copyright (c) 2026 Varun Prasath
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- SOFTWARE.
-*/
-
 package com.varunlegend.vplayer.utils
+
 import android.app.AlertDialog
 import android.content.Context
 import android.view.GestureDetector
@@ -30,7 +7,7 @@ import android.view.MotionEvent
 import androidx.media3.common.Player
 import androidx.media3.ui.PlayerView
 
-
+/** Detects flings to shift subtitle timing and handles subtitle settings */
 class SubtitleGestureHelper(
     private val context: Context,
     private val player: Player
@@ -76,8 +53,8 @@ class SubtitleGestureHelper(
         AlertDialog.Builder(context)
             .setTitle("Subtitle Size")
             .setItems(sizes) { _, which ->
-                
-                
+                // Future: connect this to a subtitle text view
+                // subtitleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f * scaleValues[which])
             }
             .show()
     }
