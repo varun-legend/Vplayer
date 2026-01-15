@@ -1,97 +1,142 @@
-# VPlayer
+# 🎬 VPlayer
 
-**VPlayer** — simple, lightweight video player for Android (legacy project).
+**VPlayer** is a simple, lightweight Android video player built using **ExoPlayer (media3)** and classic Android Views.
 
-A compact Android video player built with ExoPlayer (media3) and classic Android views. Features include file browsing via MediaStore & SAF, an ExoPlayer `PlayerView` with custom controls, gesture-based seek/volume/brightness, pinch-to-zoom, subtitle timing adjustments, and Picture-in-Picture support.
+This was my **first Android app project**. It’s not perfect, it’s not bleeding-edge — but it *works*, and it taught me a lot.
 
-This project is released under the **MIT License**. See the `LICENSE` section below for the full text.
+Originally, I planned to keep this project proprietary. But since it’s no longer actively maintained, I decided to **open-source it instead** so early Android developers can learn from it, explore real playback logic, and build on top of it freely.
 
----
+One fun constraint:  
+👉 **This project was built entirely using GitHub Actions** — no desktop IDEs, no Android Studio. Everything was edited, built, and tested through CI.
 
-## Highlights / Features
-
-- Uses **media3 / ExoPlayer** for playback.
-- Custom `PlayerView` controller layout and custom controls.
-- Gesture controls:
-  - Horizontal swipe → seek
-  - Vertical left/right → brightness / volume
-  - Double-tap → speed toggle
-  - Pinch → zoom & pan
-  - Fling gestures used for subtitle timing adjustments
-- Simple file listing using `MediaStore` (video) with thumbnail loading via Glide.
-- Picture-in-Picture support on supported devices.
+If this helps even one beginner understand media playback better, it’s worth it ❤️
 
 ---
 
-## Project structure & file overview
+## ✨ Features
 
-Below is a compact overview of the key files in the repository (based on the project snapshot you provided):
-
-### Root / app
-- `app/src/main/AndroidManifest.xml`  
-  App manifest and permission declarations (legacy READ_EXTERNAL_STORAGE + Android 13+ granular media permissions, MANAGE_EXTERNAL_STORAGE opt-in, INTERNET, etc.).
-
-### Resources
-- `app/src/main/res/values/styles.xml` — theme & styling.
-- `app/src/main/res/values/colors.xml` — color palette used by the app.
-- `app/src/main/res/values/strings.xml` — user-facing strings.
-- `app/src/main/res/layout/activity_main.xml` — main activity layout with the `RecyclerView` that lists media.
-- `app/src/main/res/layout/item_media.xml` — single media item view (thumbnail, name, duration).
-- `app/src/main/res/layout/activity_player.xml` — player activity layout containing `PlayerView`.
-- `app/src/main/res/layout/custom_player_controls.xml` — custom controller layout used by `PlayerView`.
-- `app/src/main/res/menu/player_menu.xml` — player options (speed, zoom reset, subtitle settings).
-- `app/src/main/res/drawable/*` — shape drawables & vectors like launcher foreground/background, play button bg, placeholder.
-- `app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml` — adaptive icon.
-
-### Kotlin source (`app/src/main/java/com/varunlegend/vplayer`)
-- `MainActivity.kt`  
-  Requests permissions, queries `MediaStore.Video` and populates a `RecyclerView`. Launches `PlayerActivity` with selected URI.
-
-- `PlayerActivity.kt`  
-  Sets up `ExoPlayer` (`media3`) and `PlayerView`. Handles gestures (double-tap speed toggle, swipe-seek, volume/brightness), PiP entry on home, lifecycle handling, and uses helper classes for zoom & subtitle gestures.
-
-- `MediaItemModel.kt`  
-  Simple data class for media items (name, duration, uri).
-
-- `adapters/MediaAdapter.kt`  
-  RecyclerView adapter. Loads thumbnails via `MediaStore` + Glide, binds name/duration and click handler.
-
-- `utils/MediaUtils.kt`  
-  Helper utilities: building player, extracting duration using `MediaMetadataRetriever`, and showing playback speed dialog.
-
-- `utils/ZoomPanListener.kt`  
-  Pinch-to-zoom / pan logic; applies a matrix transform on the `TextureView` surface.
-
-- `utils/SubtitleGestureHelper.kt`  
-  Detects fling gestures to shift subtitle timing and provides dialogs to change subtitle delay/size.
+- 🎥 Powered by **media3 / ExoPlayer**
+- 🎛️ Custom `PlayerView` controller layout
+- 📂 Video browsing via **MediaStore** and **SAF**
+- 🤏 Rich gesture controls:
+  - Horizontal swipe → Seek
+  - Vertical swipe (left/right) → Brightness / Volume
+  - Double-tap → Playback speed toggle
+  - Pinch → Zoom & pan
+  - Fling → Subtitle timing adjustment
+- 🖼️ Video thumbnails via **Glide**
+- 🪟 **Picture-in-Picture (PiP)** support
+- 🧩 Clean, minimal, and easy-to-follow structure
 
 ---
 
-## Build & run (legacy notes)
+## 🧠 Project Overview
 
-1. Open in Android Studio (matching an older Android Gradle plugin / Kotlin version the project used).
-2. Ensure `minSdk`, `targetSdk` and Gradle plugin versions are set appropriately for media3 (ExoPlayer) and your environment.
-3. Give the app appropriate runtime permissions:
-   - On Android ≤ 12: `READ_EXTERNAL_STORAGE`
-   - On Android 13+: `READ_MEDIA_VIDEO` and `READ_MEDIA_AUDIO`
-   - (Optional) `MANAGE_EXTERNAL_STORAGE` if you rely on broad file-tree operations via SAF — beware scoped storage rules.
-4. Run on a device/emulator with media files.
+### App structure
+
+```
+app/
+ └─ src/main/
+    ├─ AndroidManifest.xml
+    ├─ java/com/varunlegend/vplayer
+    │  ├─ MainActivity.kt
+    │  ├─ PlayerActivity.kt
+    │  ├─ MediaItemModel.kt
+    │  ├─ adapters/
+    │  │  └─ MediaAdapter.kt
+    │  └─ utils/
+    │     ├─ MediaUtils.kt
+    │     ├─ ZoomPanListener.kt
+    │     └─ SubtitleGestureHelper.kt
+    └─ res/
+       ├─ layout/
+       ├─ values/
+       ├─ drawable/
+       └─ mipmap/
+```
 
 ---
 
-## Notes & caveats
+## 🧩 Key Files Explained
 
-- This is a **legacy** project snapshot. If upgrading to modern Android or Compose/Jetpack libraries, consider migrating UI and player lifecycle handling.
-- If you plan to distribute on Play Store, re-check permission usage (esp. `MANAGE_EXTERNAL_STORAGE`) and targetSdk requirements.
-- Thumbnail API usage and direct access to internal settings may need adjustments for newer Android versions and permissions.
+### `MainActivity.kt`
+- Handles runtime permissions
+- Queries `MediaStore.Video`
+- Displays videos in a `RecyclerView`
+- Launches `PlayerActivity` with the selected video URI
+
+### `PlayerActivity.kt`
+- Sets up **ExoPlayer (media3)**
+- Hosts the `PlayerView`
+- Handles:
+  - Gestures (seek, brightness, volume, speed)
+  - Picture-in-Picture mode
+  - Player lifecycle events
+  - Zoom & subtitle helpers
+
+### `MediaAdapter.kt`
+- RecyclerView adapter for video list
+- Loads thumbnails using Glide
+- Displays title and duration
+
+### `ZoomPanListener.kt`
+- Implements pinch-to-zoom and panning
+- Applies matrix transforms to the video surface
+
+### `SubtitleGestureHelper.kt`
+- Uses fling gestures to adjust subtitle timing
+- Provides subtitle delay & size controls
 
 ---
 
-## License
+## 🛠️ Build & Run (Legacy Notes)
 
-This project is licensed under the **MIT License**
-see the Licence file for details
+1. Open the project in **Android Studio**
+2. Use compatible versions of:
+   - Android Gradle Plugin
+   - Kotlin
+   - media3 / ExoPlayer
+3. Grant runtime permissions:
+   - **Android ≤ 12** → `READ_EXTERNAL_STORAGE`
+   - **Android 13+** → `READ_MEDIA_VIDEO`, `READ_MEDIA_AUDIO`
+   - Optional: `MANAGE_EXTERNAL_STORAGE` (be careful with Play Store rules)
+4. Run on a real device or emulator with video files
 
 ---
 
-*End of README content. ✨*
+## ⚠️ Notes & Caveats
+
+- This is a **legacy project**
+- Not optimized for modern Jetpack Compose or latest Android APIs
+- If publishing to Play Store:
+  - Re-check storage permissions
+  - Update `targetSdk`
+  - Follow scoped storage guidelines
+- Great as:
+  - A learning reference
+  - A base for experiments
+  - A starter for custom players
+
+---
+
+## 📜 License
+
+This project is released under the **MIT License**.
+
+You are free to:
+- Use it
+- Modify it
+- Learn from it
+- Ship it
+
+See the `LICENSE` file for full details.
+
+---
+
+## ❤️ Final Note
+
+This project isn’t meant to compete with VLC or MX Player.  
+It’s meant to show **how a real Android video player works under the hood**.
+
+If you’re a beginner — clone it, break it, improve it.  
+That’s exactly why it’s open source 😊
