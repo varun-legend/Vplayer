@@ -1,22 +1,44 @@
+<!--
+ MIT License
+ 
+ Copyright (c) 2026 Varun Prasath
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+-->
+
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <!-- Legacy access (Android ≤12) -->
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
 
-    <!-- Modern granular media access (Android 13+) -->
+    
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
-    <!-- Optional: full file-tree access via SAF -->
+    
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
 
-    <!-- Internet (in case you fetch subtitles or streams) -->
+    
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <application
@@ -27,7 +49,7 @@
         android:theme="@style/Theme.VPlayer"
         tools:remove="android:appComponentFactory">
 
-        <!-- Launch entry point: requests perms and forwards to folder browser -->
+        
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -37,12 +59,12 @@
             </intent-filter>
         </activity>
 
-        <!-- File-tree browser via SAF + DocumentFile -->
+        
         <activity
             android:name=".FolderBrowserActivity"
             android:exported="true" />
 
-        <!-- Video player (ExoPlayer) with gestures, PiP, subtitles -->
+        
         <activity
             android:name=".PlayerActivity"
             android:exported="false"
